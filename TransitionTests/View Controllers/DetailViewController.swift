@@ -11,7 +11,6 @@ import UIKit
 final class DetailViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
-    var presentationStyle: PresentationStyle!
     lazy var swipeInteractionController = SwipeInteractionController(viewController: self)
     
 }

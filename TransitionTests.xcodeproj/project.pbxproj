@@ -17,6 +17,7 @@
 		7C4548DA1FFF8D2F002BCA92 /* ScalePresentAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4548D91FFF8D2F002BCA92 /* ScalePresentAnimationController.swift */; };
 		7C4548DC1FFF9BEA002BCA92 /* ScaleDismissAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4548DB1FFF9BEA002BCA92 /* ScaleDismissAnimationController.swift */; };
 		7C84E85A1FFFBB2000F39F6A /* SwipeInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84E8591FFFBB2000F39F6A /* SwipeInteractionController.swift */; };
+		7C84E85E1FFFC91400F39F6A /* CrossDisolveAnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84E85D1FFFC91400F39F6A /* CrossDisolveAnimationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		7C4548D91FFF8D2F002BCA92 /* ScalePresentAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalePresentAnimationController.swift; sourceTree = "<group>"; };
 		7C4548DB1FFF9BEA002BCA92 /* ScaleDismissAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleDismissAnimationController.swift; sourceTree = "<group>"; };
 		7C84E8591FFFBB2000F39F6A /* SwipeInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeInteractionController.swift; sourceTree = "<group>"; };
+		7C84E85D1FFFC91400F39F6A /* CrossDisolveAnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossDisolveAnimationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,9 +78,9 @@
 		7C4548D51FFF8CD6002BCA92 /* Animation controllers */ = {
 			isa = PBXGroup;
 			children = (
-				7C4548D91FFF8D2F002BCA92 /* ScalePresentAnimationController.swift */,
-				7C4548DB1FFF9BEA002BCA92 /* ScaleDismissAnimationController.swift */,
 				7C84E8591FFFBB2000F39F6A /* SwipeInteractionController.swift */,
+				7C84E85B1FFFC8E600F39F6A /* Modal */,
+				7C84E85C1FFFC8F100F39F6A /* Navigation Controller */,
 			);
 			path = "Animation controllers";
 			sourceTree = "<group>";
@@ -109,6 +111,23 @@
 				7C4548D31FFF8642002BCA92 /* PhotoTableViewCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		7C84E85B1FFFC8E600F39F6A /* Modal */ = {
+			isa = PBXGroup;
+			children = (
+				7C4548D91FFF8D2F002BCA92 /* ScalePresentAnimationController.swift */,
+				7C4548DB1FFF9BEA002BCA92 /* ScaleDismissAnimationController.swift */,
+			);
+			path = Modal;
+			sourceTree = "<group>";
+		};
+		7C84E85C1FFFC8F100F39F6A /* Navigation Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7C84E85D1FFFC91400F39F6A /* CrossDisolveAnimationController.swift */,
+			);
+			path = "Navigation Controller";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,6 +207,7 @@
 				7C84E85A1FFFBB2000F39F6A /* SwipeInteractionController.swift in Sources */,
 				7C4548DA1FFF8D2F002BCA92 /* ScalePresentAnimationController.swift in Sources */,
 				7C4548D21FFF8148002BCA92 /* DetailViewController.swift in Sources */,
+				7C84E85E1FFFC91400F39F6A /* CrossDisolveAnimationController.swift in Sources */,
 				7C4548C21FFF8061002BCA92 /* MainViewController.swift in Sources */,
 				7C4548C01FFF8061002BCA92 /* AppDelegate.swift in Sources */,
 			);

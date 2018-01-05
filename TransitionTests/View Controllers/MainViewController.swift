@@ -19,8 +19,12 @@ final class MainViewController: UIViewController {
     @IBOutlet weak var modalSwitch: UISwitch!
     private let cellImages = [#imageLiteral(resourceName: "image1"), #imageLiteral(resourceName: "image2"), #imageLiteral(resourceName: "image3"), #imageLiteral(resourceName: "image4"), #imageLiteral(resourceName: "image5")]
     
+    /// Modal animation controllers
     private var modalPresentAnimationController: ScalePresentAnimationController?
     private var modalDismissAnimationController: ScaleDismissAnimationController?
+    
+    /// Navigation Controller animation controller
+    private var crossDisolveAnimationController: CrossDisolveAnimationController?
     
     private var presentationStyle: PresentationStyle {
         return modalSwitch.isOn ? .modal : .push
@@ -30,6 +34,7 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        navigationController?.delegate = self
     }
 
 }
@@ -60,19 +65,29 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.cellForRow(at: indexPath) as? PhotoTableViewCell else { return }
         let image = cellImages[indexPath.row]
         let detailVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
-        detailVC.presentationStyle = presentationStyle
         detailVC.transitioningDelegate = self
         detailVC.loadViewIfNeeded()
         detailVC.imageView.image = image
         
         let convertedFrame = view.convert(cell.photoImageView.frame, from: cell)
+        
+        /// Sets presentation style for interaction controller
+        let interactionController = detailVC.swipeInteractionController
+        interactionController.presentationStyle = presentationStyle
+        
+        /// Modal animation controllers
         modalPresentAnimationController = ScalePresentAnimationController(
             originFrame: convertedFrame,
             originView: cell.photoImageView
         )
         modalDismissAnimationController = ScaleDismissAnimationController(
             destinationFrame: convertedFrame,
-            interactionController: detailVC.swipeInteractionController
+            interactionController: interactionController
+        )
+        
+        /// Navigation Controller animation controllers
+        crossDisolveAnimationController = CrossDisolveAnimationController(
+            interactionController: interactionController
         )
         
         switch presentationStyle {
@@ -105,4 +120,30 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
     }
     
 }
+
+extension MainViewController: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        switch operation {
+        case .push:
+            crossDisolveAnimationController?.isPushing = true
+            return crossDisolveAnimationController
+        case .pop:
+            crossDisolveAnimationController?.isPushing = false
+            return crossDisolveAnimationController
+        default:
+            return nil
+        }
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        guard let animator = animationController as? CrossDisolveAnimationController,
+            let interactionController = animator.interactionController,
+            interactionController.isInProgress
+            else { return nil }
+        return interactionController
+    }
+    
+}
+
 
