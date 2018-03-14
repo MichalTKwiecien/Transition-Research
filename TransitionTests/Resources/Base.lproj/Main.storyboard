@@ -11,7 +11,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--isModal:-->
+        <!--Gallery-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="MainViewController" customModule="TransitionTests" customModuleProvider="target" sceneMemberID="viewController">
@@ -59,27 +59,56 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zYP-Ue-iYG">
+                                <rect key="frame" x="0.0" y="627" width="375" height="40"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Idh-WI-gpK">
+                                        <rect key="frame" x="8" y="0.0" width="359" height="40"/>
+                                        <subviews>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Ro2-4r-iSx">
+                                                <rect key="frame" x="0.0" y="6" width="169.5" height="29"/>
+                                                <segments>
+                                                    <segment title="Modal"/>
+                                                    <segment title="NavVC"/>
+                                                </segments>
+                                            </segmentedControl>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ee5-5H-w2T">
+                                                <rect key="frame" x="189.5" y="6" width="169.5" height="29"/>
+                                                <segments>
+                                                    <segment title="Spring"/>
+                                                    <segment title="Dissolve"/>
+                                                </segments>
+                                            </segmentedControl>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="3DP-Ze-aIb"/>
+                                    <constraint firstAttribute="bottom" secondItem="Idh-WI-gpK" secondAttribute="bottom" id="5x5-Gs-PuI"/>
+                                    <constraint firstAttribute="trailing" secondItem="Idh-WI-gpK" secondAttribute="trailing" constant="8" id="Ihz-4p-agR"/>
+                                    <constraint firstItem="Idh-WI-gpK" firstAttribute="top" secondItem="zYP-Ue-iYG" secondAttribute="top" id="fYE-WU-bJ2"/>
+                                    <constraint firstItem="Idh-WI-gpK" firstAttribute="leading" secondItem="zYP-Ue-iYG" secondAttribute="leading" constant="8" id="vTv-LN-ZXA"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Tjz-WV-m0p" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="3xr-vL-pSK"/>
                             <constraint firstItem="Tjz-WV-m0p" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="DA5-ru-Lpd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="zYP-Ue-iYG" secondAttribute="bottom" id="jz9-ea-YoZ"/>
                             <constraint firstItem="Tjz-WV-m0p" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="jzK-OJ-Gr5"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="zYP-Ue-iYG" secondAttribute="trailing" id="rGT-c8-nvJ"/>
+                            <constraint firstItem="zYP-Ue-iYG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="s9Y-P8-Tcg"/>
                             <constraint firstItem="Tjz-WV-m0p" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="twn-yW-yqJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="isModal:" id="znB-Se-sUd">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="61Z-7N-ddl">
-                            <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="pF9-4K-PFw">
-                                <rect key="frame" x="308" y="6.5" width="51" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </switch>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Gallery" id="znB-Se-sUd"/>
                     <connections>
-                        <outlet property="modalSwitch" destination="pF9-4K-PFw" id="vVs-w4-xCA"/>
+                        <outlet property="presentationControl" destination="Ro2-4r-iSx" id="7ZX-SC-rrt"/>
                         <outlet property="tableView" destination="Tjz-WV-m0p" id="91Z-Cv-qRg"/>
+                        <outlet property="transitionControl" destination="ee5-5H-w2T" id="T7h-so-wGq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

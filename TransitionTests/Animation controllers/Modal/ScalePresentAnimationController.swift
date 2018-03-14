@@ -38,25 +38,15 @@ final class ScalePresentAnimationController: NSObject, UIViewControllerAnimatedT
         toVC.view.isHidden = true
         originView.isHidden = true
         
-        UIView.animateKeyframes(
-            withDuration: animationDuration,
-            delay: 0,
-            options: .calculationModeCubic,
-            animations: {
-                UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1/4) {
-                    snapshot.layer.transform = CATransform3DMakeScale(0.75, 0.75, 1)
-                }
-                
-                UIView.addKeyframe(withRelativeStartTime: 1/3, relativeDuration: 1/3) {
-                    snapshot.frame = finalFrame
-                }
-        },
-            completion: { _ in
+        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
+                snapshot.frame = finalFrame
+            }, completion: { _ in
                 toVC.view.isHidden = false
                 self.originView.isHidden = false
                 snapshot.removeFromSuperview()
                 fromVC.view.layer.transform = CATransform3DIdentity
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-        })
+            }
+        )
     }
 }

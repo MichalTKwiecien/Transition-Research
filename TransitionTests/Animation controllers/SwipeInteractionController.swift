@@ -12,8 +12,8 @@ class SwipeInteractionController: UIPercentDrivenInteractiveTransition {
 
     var isInProgress = false
     var presentationStyle: PresentationStyle = .modal
-    private let maxTranslationAvailable: CGFloat = 100
-    private let translationProgressNeededToDismiss: CGFloat = 0.5
+    private let maxTranslationAvailable: CGFloat = 200
+    private let translationProgressNeededToDismiss: CGFloat = 0.3
     private var shouldCompleteTransition = false
     private weak var viewController: UIViewController!
     

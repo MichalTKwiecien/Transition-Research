@@ -13,21 +13,31 @@ enum PresentationStyle {
     case push
 }
 
+enum TransitionStyle {
+    case spring
+    case dissolve
+}
+
 final class MainViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var modalSwitch: UISwitch!
+    @IBOutlet weak var presentationControl: UISegmentedControl!
+    @IBOutlet weak var transitionControl: UISegmentedControl!
     private let cellImages = [#imageLiteral(resourceName: "image1"), #imageLiteral(resourceName: "image2"), #imageLiteral(resourceName: "image3"), #imageLiteral(resourceName: "image4"), #imageLiteral(resourceName: "image5")]
     
     /// Modal animation controllers
-    private var modalPresentAnimationController: ScalePresentAnimationController?
-    private var modalDismissAnimationController: ScaleDismissAnimationController?
+    private var scalePresentAnimationController: ScalePresentAnimationController?
+    private var scaleDismissAnimationController: ScaleDismissAnimationController?
     
     /// Navigation Controller animation controller
     private var crossDisolveAnimationController: CrossDisolveAnimationController?
     
     private var presentationStyle: PresentationStyle {
-        return modalSwitch.isOn ? .modal : .push
+        return presentationControl.selectedSegmentIndex == 0 ? .modal : .push
+    }
+    
+    private var transitionStyle: TransitionStyle {
+        return transitionControl.selectedSegmentIndex == 0 ? .spring : .dissolve
     }
     
     override func viewDidLoad() {
@@ -36,7 +46,6 @@ final class MainViewController: UIViewController {
         tableView.dataSource = self
         navigationController?.delegate = self
     }
-
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
@@ -76,11 +85,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         interactionController.presentationStyle = presentationStyle
         
         /// Modal animation controllers
-        modalPresentAnimationController = ScalePresentAnimationController(
+        scalePresentAnimationController = ScalePresentAnimationController(
             originFrame: convertedFrame,
             originView: cell.photoImageView
         )
-        modalDismissAnimationController = ScaleDismissAnimationController(
+        scaleDismissAnimationController = ScaleDismissAnimationController(
             destinationFrame: convertedFrame,
             interactionController: interactionController
         )
@@ -104,11 +113,21 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainViewController: UIViewControllerTransitioningDelegate {
     
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return modalPresentAnimationController
+        switch transitionStyle {
+        case .spring:
+            return scalePresentAnimationController
+        case .dissolve:
+            return crossDisolveAnimationController
+        }
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return modalDismissAnimationController
+        switch transitionStyle {
+        case .spring:
+            return scaleDismissAnimationController
+        case .dissolve:
+            return crossDisolveAnimationController
+        }
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
@@ -126,11 +145,9 @@ extension MainViewController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         switch operation {
         case .push:
-            crossDisolveAnimationController?.isPushing = true
-            return crossDisolveAnimationController
+            return transitionStyle == .dissolve ? crossDisolveAnimationController : scalePresentAnimationController
         case .pop:
-            crossDisolveAnimationController?.isPushing = false
-            return crossDisolveAnimationController
+            return transitionStyle == .dissolve ? crossDisolveAnimationController : scaleDismissAnimationController
         default:
             return nil
         }

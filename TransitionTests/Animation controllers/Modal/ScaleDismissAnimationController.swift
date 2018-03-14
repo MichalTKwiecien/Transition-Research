@@ -37,21 +37,15 @@ class ScaleDismissAnimationController: NSObject, UIViewControllerAnimatedTransit
        
         fromVC.view.isHidden = true
         
-        UIView.animateKeyframes(
-            withDuration: animationDuration,
-            delay: 0,
-            options: .calculationModeCubic,
-            animations: {
-                UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 1) {
-                    snapshot.frame = self.destinationFrame
-                }
-        },
-            completion: { _ in
+        UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseInOut, animations: {
+                snapshot.frame = self.destinationFrame
+            }, completion: { _ in
                 fromVC.view.isHidden = false
                 snapshot.removeFromSuperview()
                 snapshotToVC.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-        })
+            }
+        )
     }
 }
     
