@@ -75,8 +75,9 @@
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="ee5-5H-w2T">
                                                 <rect key="frame" x="189.5" y="6" width="169.5" height="29"/>
                                                 <segments>
-                                                    <segment title="Spring"/>
+                                                    <segment title="Default"/>
                                                     <segment title="Dissolve"/>
+                                                    <segment title="Spring"/>
                                                 </segments>
                                             </segmentedControl>
                                         </subviews>

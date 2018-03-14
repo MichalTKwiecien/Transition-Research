@@ -13,9 +13,10 @@ enum PresentationStyle {
     case push
 }
 
-enum TransitionStyle {
-    case spring
+enum TransitionStyle: Int {
+    case `default`
     case dissolve
+    case spring
 }
 
 final class MainViewController: UIViewController {
@@ -25,19 +26,15 @@ final class MainViewController: UIViewController {
     @IBOutlet weak var transitionControl: UISegmentedControl!
     private let cellImages = [#imageLiteral(resourceName: "image1"), #imageLiteral(resourceName: "image2"), #imageLiteral(resourceName: "image3"), #imageLiteral(resourceName: "image4"), #imageLiteral(resourceName: "image5")]
     
-    /// Modal animation controllers
-    private var scalePresentAnimationController: ScalePresentAnimationController?
-    private var scaleDismissAnimationController: ScaleDismissAnimationController?
-    
-    /// Navigation Controller animation controller
-    private var crossDisolveAnimationController: CrossDisolveAnimationController?
+    private var lastSelectedCellFrame: CGRect?
+    private weak var detailVC: DetailViewController?
     
     private var presentationStyle: PresentationStyle {
         return presentationControl.selectedSegmentIndex == 0 ? .modal : .push
     }
     
     private var transitionStyle: TransitionStyle {
-        return transitionControl.selectedSegmentIndex == 0 ? .spring : .dissolve
+        return TransitionStyle(rawValue: transitionControl.selectedSegmentIndex)!
     }
     
     override func viewDidLoad() {
@@ -73,37 +70,22 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) as? PhotoTableViewCell else { return }
         let image = cellImages[indexPath.row]
-        let detailVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "detailViewController") as! DetailViewController
-        detailVC.transitioningDelegate = self
-        detailVC.loadViewIfNeeded()
-        detailVC.imageView.image = image
+        detailVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "detailViewController") as? DetailViewController
+        detailVC?.transitioningDelegate = self
+        detailVC?.loadViewIfNeeded()
+        detailVC?.imageView.image = image
         
-        let convertedFrame = view.convert(cell.photoImageView.frame, from: cell)
+        // Saves last selected cell frame
+        lastSelectedCellFrame = view.convert(cell.photoImageView.frame, from: cell)
         
-        /// Sets presentation style for interaction controller
-        let interactionController = detailVC.swipeInteractionController
-        interactionController.presentationStyle = presentationStyle
-        
-        /// Modal animation controllers
-        scalePresentAnimationController = ScalePresentAnimationController(
-            originFrame: convertedFrame,
-            originView: cell.photoImageView
-        )
-        scaleDismissAnimationController = ScaleDismissAnimationController(
-            destinationFrame: convertedFrame,
-            interactionController: interactionController
-        )
-        
-        /// Navigation Controller animation controllers
-        crossDisolveAnimationController = CrossDisolveAnimationController(
-            interactionController: interactionController
-        )
+        // Sets presentation style for interaction controller
+        detailVC?.swipeInteractionController.presentationStyle = presentationStyle
         
         switch presentationStyle {
         case .modal:
-            navigationController?.present(detailVC, animated: true)
+            navigationController?.present(detailVC!, animated: true)
         case .push:
-            navigationController?.pushViewController(detailVC, animated: true)
+            navigationController?.pushViewController(detailVC!, animated: true)
         }
         
     }
@@ -115,27 +97,28 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         switch transitionStyle {
         case .spring:
-            return scalePresentAnimationController
+            return ScaleAnimationController(originFrame: lastSelectedCellFrame, isPresenting: true)
         case .dissolve:
-            return crossDisolveAnimationController
+            return CrossDisolveAnimationController()
+        case .default:
+            return nil
         }
     }
     
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         switch transitionStyle {
         case .spring:
-            return scaleDismissAnimationController
+            return ScaleAnimationController(originFrame: lastSelectedCellFrame, isPresenting: false)
         case .dissolve:
-            return crossDisolveAnimationController
+            return CrossDisolveAnimationController()
+        case .default:
+            return nil
         }
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard let animator = animator as? ScaleDismissAnimationController,
-            let interactionController = animator.interactionController,
-            interactionController.isInProgress
-            else { return nil }
-        return interactionController
+        guard let detailVC = detailVC, detailVC.swipeInteractionController.isInProgress else { return nil }
+        return detailVC.swipeInteractionController
     }
     
 }
@@ -145,22 +128,30 @@ extension MainViewController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         switch operation {
         case .push:
-            return transitionStyle == .dissolve ? crossDisolveAnimationController : scalePresentAnimationController
+            switch transitionStyle {
+            case .spring:
+                return ScaleAnimationController(originFrame: lastSelectedCellFrame, isPresenting: true)
+            case .dissolve:
+                return CrossDisolveAnimationController()
+            case .default:
+                return nil
+            }
         case .pop:
-            return transitionStyle == .dissolve ? crossDisolveAnimationController : scaleDismissAnimationController
+            switch transitionStyle {
+            case .spring:
+                return ScaleAnimationController(originFrame: lastSelectedCellFrame, isPresenting: false)
+            case .dissolve:
+                return CrossDisolveAnimationController()
+            case .default:
+                return nil
+            }
         default:
             return nil
         }
     }
     
     func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard let animator = animationController as? CrossDisolveAnimationController,
-            let interactionController = animator.interactionController,
-            interactionController.isInProgress
-            else { return nil }
-        return interactionController
+        guard let detailVC = detailVC, detailVC.swipeInteractionController.isInProgress else { return nil }
+        return detailVC.swipeInteractionController
     }
-    
 }
-
-

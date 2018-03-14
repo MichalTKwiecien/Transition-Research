@@ -11,18 +11,13 @@ import UIKit
 final class CrossDisolveAnimationController: NSObject, UIViewControllerAnimatedTransitioning {
     
     private let animationDuration: TimeInterval = 1.0
-    let interactionController: SwipeInteractionController?
-    
-    init(interactionController: SwipeInteractionController?) {
-        self.interactionController = interactionController
-    }
-    
+
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return animationDuration
     }
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let toVC = transitionContext.viewController(forKey: .to)else { return }
+        guard let toVC = transitionContext.viewController(forKey: .to) else { return }
 
         transitionContext.containerView.addSubview(toVC.view)
         toVC.view.alpha = 0
