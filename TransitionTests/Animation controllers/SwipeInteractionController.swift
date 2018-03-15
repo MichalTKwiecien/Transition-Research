@@ -10,7 +10,6 @@ import UIKit
 
 class SwipeInteractionController: UIPercentDrivenInteractiveTransition {
 
-    var isInProgress = false
     var presentationStyle: PresentationStyle = .modal
     private let maxTranslationAvailable: CGFloat = 200
     private let translationProgressNeededToDismiss: CGFloat = 0.1
@@ -37,7 +36,6 @@ class SwipeInteractionController: UIPercentDrivenInteractiveTransition {
         
         switch gestureRecognizer.state {
         case .began:
-            isInProgress = true
             switch presentationStyle {
             case .modal:
                 viewController.dismiss(animated: true, completion: nil)
@@ -48,10 +46,8 @@ class SwipeInteractionController: UIPercentDrivenInteractiveTransition {
             shouldCompleteTransition = progress > translationProgressNeededToDismiss
             update(progress)
         case .cancelled:
-            isInProgress = false
             cancel()
         case .ended:
-            isInProgress = false
             if shouldCompleteTransition {
                 finish()
             } else {

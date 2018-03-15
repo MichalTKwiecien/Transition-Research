@@ -117,7 +117,7 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
     }
     
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard let detailVC = detailVC, detailVC.swipeInteractionController.isInProgress else { return nil }
+        guard let detailVC = detailVC else { return nil }
         return detailVC.swipeInteractionController
     }
     
@@ -151,7 +151,7 @@ extension MainViewController: UINavigationControllerDelegate {
     }
     
     func navigationController(_ navigationController: UINavigationController, interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        guard let detailVC = detailVC, detailVC.swipeInteractionController.isInProgress else { return nil }
+        guard let detailVC = detailVC else { return nil }
         return detailVC.swipeInteractionController
     }
 }
