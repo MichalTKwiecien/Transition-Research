@@ -120,7 +120,6 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
         guard let detailVC = detailVC else { return nil }
         return detailVC.swipeInteractionController
     }
-    
 }
 
 extension MainViewController: UINavigationControllerDelegate {
