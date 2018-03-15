@@ -12,5 +12,4 @@ final class DetailViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
     lazy var swipeInteractionController = SwipeInteractionController(viewController: self)
-    
 }

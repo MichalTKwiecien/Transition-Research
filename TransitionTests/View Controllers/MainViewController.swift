@@ -63,7 +63,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         cell.photoImageView.image = image
         cell.label.text = "Image at row \(indexPath.row)"
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -87,9 +86,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         case .push:
             navigationController?.pushViewController(detailVC!, animated: true)
         }
-        
     }
-    
 }
 
 extension MainViewController: UIViewControllerTransitioningDelegate {
